@@ -7,6 +7,7 @@ namespace RamWebAPI.Models
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public string LocalFileFolder { get; set; }
+        public string ChangeInfo { get; set; }
         public DateTime Date { get; set; }
     }
 }

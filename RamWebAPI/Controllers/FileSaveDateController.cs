@@ -43,6 +43,7 @@ namespace RamWebAPI.Controllers
                             {
                                 FileName = repository.FileName,
                                 FilePath = repository.FilePath,
+                                LocalFileFolder = repository.LocalFileFolder,
                                 Date = fileDates
                             }
                         );

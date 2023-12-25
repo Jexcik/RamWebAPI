@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using RamWebAPI.Models;
 using RamWebAPI.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -10,7 +12,7 @@ namespace RamWebAPI.Controllers
 {
     [ApiController]
     [Route("api")]
-    public partial class FileSaveDateController : ControllerBase
+    public partial class FileSaveDateController : Controller
     {
         [HttpGet("saveDates")]
         public async Task<IActionResult> GetFileDates()
@@ -56,6 +58,26 @@ namespace RamWebAPI.Controllers
                 }
             }
             return Ok(allFileDates);
+        }
+
+        [HttpGet("file")]
+        public IActionResult DownloadFile([FromQuery] string fileName)
+        {
+            string filePath = Path.Combine("/app/", fileName + ".dll"); ;
+            if (System.IO.File.Exists(filePath))
+            {
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(fileName + "dll", out var mimeType))
+                {
+                    mimeType = "application/octet-stream";
+                }
+                return File(fileBytes, mimeType, fileName + ".dll");
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }

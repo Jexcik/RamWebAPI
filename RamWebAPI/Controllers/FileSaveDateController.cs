@@ -33,9 +33,6 @@ namespace RamWebAPI.Controllers
                     //Создание HttpClient для выполнения запросов к серверу
                     using (HttpClient httpClient = new HttpClient())
                     {
-                        //// Задание базового URL на основе репозитория
-                        //httpClient.BaseAddress = new Uri(repository.FileName);
-
                         // Вызов асинхронного метода для получения списка даты сохранения файла
                         DateTime fileDates = await FileService.GetLocalFileLastModifiedDateAsync(repository.FilePath);
 
@@ -63,7 +60,7 @@ namespace RamWebAPI.Controllers
         [HttpGet("file")]
         public IActionResult DownloadFile([FromQuery] string fileName)
         {
-            string filePath = Path.Combine("/app/", fileName + ".dll"); ;
+            string filePath = Path.Combine($"/app/{fileName}/", fileName + ".dll"); ;
             if (System.IO.File.Exists(filePath))
             {
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -72,7 +69,7 @@ namespace RamWebAPI.Controllers
                 {
                     mimeType = "application/octet-stream";
                 }
-                return File(fileBytes, mimeType, fileName + ".dll");
+                return File(fileBytes, mimeType, fileName);
             }
             else
             {

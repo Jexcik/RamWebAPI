@@ -12,7 +12,7 @@ namespace RamWebAPI.Controllers
 {
     [ApiController]
     [Route("api")]
-    public partial class FileSaveDateController : Controller
+    public class FileSaveDateController : Controller
     {
         [HttpGet("saveDates")]
         public async Task<IActionResult> GetFileDates()
@@ -60,7 +60,8 @@ namespace RamWebAPI.Controllers
         [HttpGet("file")]
         public IActionResult DownloadFile([FromQuery] string fileName)
         {
-            string filePath = Path.Combine($"/app/{fileName}/", fileName + ".dll"); ;
+            string name = fileName.Split('.')[0];
+            string filePath = Path.Combine($"/app/{name}/", fileName); ;
             if (System.IO.File.Exists(filePath))
             {
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -69,7 +70,7 @@ namespace RamWebAPI.Controllers
                 {
                     mimeType = "application/octet-stream";
                 }
-                return File(fileBytes, mimeType, fileName);
+                return File(fileBytes, mimeType, name);
             }
             else
             {
